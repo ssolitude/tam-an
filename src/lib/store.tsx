@@ -76,22 +76,22 @@ export type CheckIn = {
   createdAt: string;
   mood: number; // 1..5
   energy: number; // 1..5
-  trigger?: TriggerKey;
-  thought?: string;
-  helped?: string;
-  forMyself?: string;
-  eveningNote?: string;
-  sample?: boolean;
+  trigger?: TriggerKey | undefined;
+  thought?: string | undefined;
+  helped?: string | undefined;
+  forMyself?: string | undefined;
+  eveningNote?: string | undefined;
+  sample?: boolean | undefined;
 };
 
 export type TinyAction = {
   id: string;
   title: string;
-  area?: AreaKey;
+  area?: AreaKey | undefined;
   date: string;
   done: boolean;
-  doneWithoutMood?: boolean;
-  sample?: boolean;
+  doneWithoutMood?: boolean | undefined;
+  sample?: boolean | undefined;
 };
 
 export type Goal = {
@@ -101,10 +101,10 @@ export type Goal = {
   monthFocus: string;
   weeklyActions: string[];
   outOfControl: string[];
-  sample?: boolean;
+  sample?: boolean | undefined;
 };
 
-export type Reminder = { id: string; text: string; sample?: boolean };
+export type Reminder = { id: string; text: string; sample?: boolean | undefined };
 
 export type Prefs = {
   onboarded: boolean;
