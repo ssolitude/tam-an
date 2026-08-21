@@ -3,8 +3,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { TRIGGERS, todayKey, useStore, type TriggerKey } from "@/lib/store";
+import { TRIGGERS, todayKey, useStore, useToday, type TriggerKey } from "@/lib/store";
 import { Heart, LifeBuoy } from "lucide-react";
 
 const FEELINGS = [
@@ -38,7 +39,8 @@ const NEXT_STEPS = [
 ];
 
 export function RescueFlow({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
-  const { addCheckIn, addAction, state } = useStore();
+  const { addCheckIn, updateCheckIn, addAction, state } = useStore();
+  const { latest } = useToday();
   const gentle = state.prefs.tone === "nhe-nhang";
   const [step, setStep] = useState(0);
   const [feelings, setFeelings] = useState<string[]>([]);
@@ -65,18 +67,24 @@ export function RescueFlow({ open, onOpenChange }: { open: boolean; onOpenChange
     setNext("");
   };
 
+  const hasContent =
+    feelings.length > 0 || !!trigger || !!fact.trim() || !!fear.trim() || !!expect.trim();
+
   const finish = () => {
-    addCheckIn({
+    // Không bịa mood/energy: lưu đúng những gì mình thật sự đã viết,
+    // gộp vào ghi nhận hôm nay nếu đã có thay vì tạo bản ghi thứ hai.
+    const entry = {
       date: todayKey(),
-      mood: 2,
-      energy: 2,
       trigger,
-      thought: [feelings.join(", "), fear && `Nỗi sợ: ${fear}`, expect && `Kỳ vọng: ${expect}`]
-        .filter(Boolean)
-        .join(" · "),
-      helped: regulation,
-      forMyself: regulation,
-    });
+      fact: fact.trim() || undefined,
+      fear: fear.trim() || undefined,
+      expect: expect.trim() || undefined,
+      thought: feelings.length ? `Cảm giác: ${feelings.join(", ")}` : undefined,
+      helped: regulation || undefined,
+      forMyself: regulation || undefined,
+    };
+    if (latest) updateCheckIn(latest.id, entry);
+    else addCheckIn(entry);
     if (next && next !== "Không làm gì thêm hôm nay") {
       addAction({ title: next, date: todayKey(), done: false, doneWithoutMood: true });
     }
@@ -85,6 +93,11 @@ export function RescueFlow({ open, onOpenChange }: { open: boolean; onOpenChange
 
   const close = () => {
     onOpenChange(false);
+    if (step > 0 && step < 5 && hasContent) {
+      // Giữ nháp: mở lại là tiếp tục, không mất những gì đã viết
+      toast("Đã giữ lại những gì mình đã viết — mở lại để tiếp tục nhé.");
+      return;
+    }
     setTimeout(reset, 250);
   };
 
@@ -181,9 +194,11 @@ export function RescueFlow({ open, onOpenChange }: { open: boolean; onOpenChange
           <div className="animate-rise space-y-4 py-2">
             <Heart className="size-6 text-primary" aria-hidden />
             <p className="font-display text-lg leading-relaxed">
-              {gentle
-                ? "Mình vừa ở lại với chính mình thay vì bỏ mặc mình. Đó là việc khó nhất trong hôm nay, và mình đã làm."
-                : "Cảm giác này thật, nhưng nó không phải kết luận. Mình vừa xử lý nó bằng hành động thay vì bằng tự phê bình."}
+              {hasContent
+                ? gentle
+                  ? "Mình vừa ở lại với chính mình thay vì bỏ mặc mình. Đó là việc khó nhất trong hôm nay, và mình đã làm."
+                  : "Cảm giác này thật, nhưng nó không phải kết luận. Mình vừa xử lý nó bằng hành động thay vì bằng tự phê bình."
+                : "Mình đã ghé qua và nhìn lại một chút. Không cần viết gì cũng được — dừng ở đây vẫn tính."}
             </p>
             {regulation && (
               <p className="rounded-2xl bg-sage-soft px-4 py-3 text-sm text-foreground">
