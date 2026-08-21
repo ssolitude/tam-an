@@ -74,8 +74,11 @@ export type CheckIn = {
   id: string;
   date: string; // yyyy-mm-dd
   createdAt: string;
-  mood: number; // 1..5
-  energy: number; // 1..5
+  mood?: number | undefined; // 1..5 — optional, never fabricated
+  energy?: number | undefined; // 1..5 — optional, never fabricated
+  fact?: string | undefined; // sự thật quan sát được (rescue flow)
+  fear?: string | undefined; // nỗi sợ (rescue flow)
+  expect?: string | undefined; // kỳ vọng tự đặt (rescue flow)
   trigger?: TriggerKey | undefined;
   thought?: string | undefined;
   helped?: string | undefined;
