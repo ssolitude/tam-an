@@ -123,6 +123,7 @@ export type Prefs = {
 };
 
 export type State = {
+  version: number;
   prefs: Prefs;
   checkIns: CheckIn[];
   actions: TinyAction[];
