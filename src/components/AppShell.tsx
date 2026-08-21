@@ -29,7 +29,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <RescueContext.Provider value={{ openRescue: () => setRescueOpen(true) }}>
-      <div className="warm-veil min-h-screen">
+      <div className="warm-veil min-h-dvh">
         <header className="sticky top-0 z-30 border-b border-border/70 bg-background/85 backdrop-blur">
           <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-3">
             <Link to="/" className="mr-auto flex items-center gap-2">
@@ -70,12 +70,22 @@ export function AppShell({ children }: { children: ReactNode }) {
 
         <main className="mx-auto max-w-5xl px-4 pb-32 pt-6 md:pb-16">{children}</main>
 
-        <footer className="mx-auto max-w-5xl px-4 pb-28 md:pb-10">
+        <footer className="mx-auto max-w-5xl px-4 pb-4 md:pb-10">
           <p className="rounded-2xl border border-border bg-secondary/60 px-4 py-3 text-xs leading-relaxed text-muted-foreground">
             Đây là công cụ tự soi chiếu và đồng hành hằng ngày, <strong>không</strong> phải ứng dụng y
             tế hay tâm lý, không chẩn đoán và không điều trị. Nếu mình đang cảm thấy không an toàn
-            hoặc có ý định làm hại bản thân, hãy nói với một người mình tin cậy, gọi 115, hoặc đường
-            dây Ngày Mai 096 306 1414. Dữ liệu chỉ được lưu trong trình duyệt của mình.
+            hoặc có ý định làm hại bản thân, hãy nói với một người mình tin cậy, gọi{" "}
+            <a href="tel:115" className="font-medium text-primary underline underline-offset-2">
+              115
+            </a>
+            , hoặc đường dây Ngày Mai{" "}
+            <a
+              href="tel:0963061414"
+              className="font-medium text-primary underline underline-offset-2"
+            >
+              096 306 1414
+            </a>
+            . Dữ liệu chỉ được lưu trong trình duyệt của mình.
           </p>
         </footer>
 
@@ -90,7 +100,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 to={n.to}
                 activeOptions={{ exact: n.to === "/" }}
                 className={cn(
-                  "flex flex-1 flex-col items-center gap-1 px-1 py-2.5 text-[11px] text-muted-foreground",
+                  "flex min-h-14 flex-1 flex-col items-center justify-center gap-1 px-1 py-2 text-[11px] text-muted-foreground",
                   "data-[status=active]:font-medium data-[status=active]:text-primary",
                 )}
               >

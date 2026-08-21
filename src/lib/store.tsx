@@ -74,8 +74,11 @@ export type CheckIn = {
   id: string;
   date: string; // yyyy-mm-dd
   createdAt: string;
-  mood: number; // 1..5
-  energy: number; // 1..5
+  mood?: number | undefined; // 1..5 — optional, never fabricated
+  energy?: number | undefined; // 1..5 — optional, never fabricated
+  fact?: string | undefined; // sự thật quan sát được (rescue flow)
+  fear?: string | undefined; // nỗi sợ (rescue flow)
+  expect?: string | undefined; // kỳ vọng tự đặt (rescue flow)
   trigger?: TriggerKey | undefined;
   thought?: string | undefined;
   helped?: string | undefined;
@@ -120,6 +123,7 @@ export type Prefs = {
 };
 
 export type State = {
+  version: number;
   prefs: Prefs;
   checkIns: CheckIn[];
   actions: TinyAction[];
@@ -156,7 +160,10 @@ const defaultPrefs: Prefs = {
   tone: "nhe-nhang",
 };
 
+const SCHEMA_VERSION = 1;
+
 const seedState = (): State => ({
+  version: SCHEMA_VERSION,
   prefs: defaultPrefs,
   checkIns: [
     {
@@ -269,8 +276,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     try {
       const raw = localStorage.getItem(KEY);
       if (raw) {
-        const parsed = JSON.parse(raw) as State;
-        setState({ ...seedState(), ...parsed, prefs: { ...defaultPrefs, ...parsed.prefs } });
+        const parsed = JSON.parse(raw) as Partial<State>;
+        if (parsed.version === SCHEMA_VERSION) {
+          setState({ ...seedState(), ...parsed, prefs: { ...defaultPrefs, ...parsed.prefs } });
+        }
+        // unknown schema version: keep seed state rather than guessing at the shape
       }
     } catch {
       /* ignore corrupt data */
@@ -360,7 +370,7 @@ export function useToday() {
     latest,
     todayCheckIns,
     todayActions,
-    lowEnergy: !!latest && latest.energy <= 2,
+    lowEnergy: latest?.energy != null && latest.energy <= 2,
   };
 }
 

@@ -26,20 +26,26 @@ export function Onboarding() {
   const togglePriority = (label: string) => {
     const key = AREAS.find((a) => a.label === label)!.key;
     const cur = (val("priorities") as AreaKey[]) ?? [];
-    set("priorities", cur.includes(key) ? cur.filter((k) => k !== key) : [...cur, key]);
+    if (cur.includes(key)) {
+      set("priorities", cur.filter((k) => k !== key));
+    } else if (cur.length < 3) {
+      set("priorities", [...cur, key]);
+    }
   };
 
   const finish = () => {
-    setPrefs({ ...draft, onboarded: true });
+    setPrefs({ ...draft, name: (draft.name ?? state.prefs.name).trim().slice(0, 40), onboarded: true });
     setStep(0);
   };
 
   return (
-    <Dialog open={open}>
-      <DialogContent
-        showCloseButton={false}
-        className="max-h-[92vh] overflow-y-auto rounded-3xl sm:max-w-lg"
-      >
+    <Dialog
+      open={open}
+      onOpenChange={(o) => {
+        if (!o) finish(); // Esc / click-outside = bỏ qua, không bao giờ kẹt trong dialog
+      }}
+    >
+      <DialogContent className="max-h-[92vh] overflow-y-auto rounded-3xl sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-xl">
             {step === 0 ? "Chào mình" : "Để app hiểu mình hơn một chút"}
@@ -64,8 +70,8 @@ export function Onboarding() {
               />
             </label>
             <p className="rounded-2xl bg-secondary/70 px-4 py-3 text-xs leading-relaxed text-muted-foreground">
-              7 câu hỏi ngắn, bỏ qua câu nào cũng được. Mọi thứ chỉ lưu trong trình duyệt này. Đây
-              không phải công cụ y tế hay tâm lý.
+              5 bước ngắn, bỏ qua câu nào cũng được — bấm ra ngoài hoặc nút Bỏ qua là xong. Mọi
+              thứ chỉ lưu trong trình duyệt này. Đây không phải công cụ y tế hay tâm lý.
             </p>
           </div>
         )}
@@ -172,15 +178,18 @@ export function Onboarding() {
               Quay lại
             </Button>
           ) : (
-            <Button variant="ghost" onClick={finish}>
+            <span />
+          )}
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={finish}>
               Bỏ qua
             </Button>
-          )}
-          {step < total - 1 ? (
-            <Button onClick={() => setStep((s) => s + 1)}>Tiếp tục</Button>
-          ) : (
-            <Button onClick={finish}>Bắt đầu</Button>
-          )}
+            {step < total - 1 ? (
+              <Button onClick={() => setStep((s) => s + 1)}>Tiếp tục</Button>
+            ) : (
+              <Button onClick={finish}>Bắt đầu</Button>
+            )}
+          </div>
         </div>
       </DialogContent>
     </Dialog>
