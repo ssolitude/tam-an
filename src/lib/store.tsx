@@ -160,7 +160,10 @@ const defaultPrefs: Prefs = {
   tone: "nhe-nhang",
 };
 
+const SCHEMA_VERSION = 1;
+
 const seedState = (): State => ({
+  version: SCHEMA_VERSION,
   prefs: defaultPrefs,
   checkIns: [
     {
@@ -273,8 +276,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     try {
       const raw = localStorage.getItem(KEY);
       if (raw) {
-        const parsed = JSON.parse(raw) as State;
-        setState({ ...seedState(), ...parsed, prefs: { ...defaultPrefs, ...parsed.prefs } });
+        const parsed = JSON.parse(raw) as Partial<State>;
+        if (parsed.version === SCHEMA_VERSION) {
+          setState({ ...seedState(), ...parsed, prefs: { ...defaultPrefs, ...parsed.prefs } });
+        }
+        // unknown schema version: keep seed state rather than guessing at the shape
       }
     } catch {
       /* ignore corrupt data */
@@ -364,7 +370,7 @@ export function useToday() {
     latest,
     todayCheckIns,
     todayActions,
-    lowEnergy: !!latest && latest.energy <= 2,
+    lowEnergy: latest?.energy != null && latest.energy <= 2,
   };
 }
 
