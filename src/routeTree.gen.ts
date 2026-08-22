@@ -10,33 +10,102 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MucTieuRouteImport } from './routes/muc-tieu'
+import { Route as NhatKyRouteImport } from './routes/nhat-ky'
+import { Route as ThietLapRouteImport } from './routes/thiet-lap'
+import { Route as TienBoRouteImport } from './routes/tien-bo'
+import { Route as TuNoiVoiMinhRouteImport } from './routes/tu-noi-voi-minh'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MucTieuRoute = MucTieuRouteImport.update({
+  id: '/muc-tieu',
+  path: '/muc-tieu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NhatKyRoute = NhatKyRouteImport.update({
+  id: '/nhat-ky',
+  path: '/nhat-ky',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThietLapRoute = ThietLapRouteImport.update({
+  id: '/thiet-lap',
+  path: '/thiet-lap',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TienBoRoute = TienBoRouteImport.update({
+  id: '/tien-bo',
+  path: '/tien-bo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TuNoiVoiMinhRoute = TuNoiVoiMinhRouteImport.update({
+  id: '/tu-noi-voi-minh',
+  path: '/tu-noi-voi-minh',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/muc-tieu': typeof MucTieuRoute
+  '/nhat-ky': typeof NhatKyRoute
+  '/thiet-lap': typeof ThietLapRoute
+  '/tien-bo': typeof TienBoRoute
+  '/tu-noi-voi-minh': typeof TuNoiVoiMinhRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/muc-tieu': typeof MucTieuRoute
+  '/nhat-ky': typeof NhatKyRoute
+  '/thiet-lap': typeof ThietLapRoute
+  '/tien-bo': typeof TienBoRoute
+  '/tu-noi-voi-minh': typeof TuNoiVoiMinhRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/muc-tieu': typeof MucTieuRoute
+  '/nhat-ky': typeof NhatKyRoute
+  '/thiet-lap': typeof ThietLapRoute
+  '/tien-bo': typeof TienBoRoute
+  '/tu-noi-voi-minh': typeof TuNoiVoiMinhRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/muc-tieu'
+    | '/nhat-ky'
+    | '/thiet-lap'
+    | '/tien-bo'
+    | '/tu-noi-voi-minh'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/muc-tieu'
+    | '/nhat-ky'
+    | '/thiet-lap'
+    | '/tien-bo'
+    | '/tu-noi-voi-minh'
+  id:
+    | '__root__'
+    | '/'
+    | '/muc-tieu'
+    | '/nhat-ky'
+    | '/thiet-lap'
+    | '/tien-bo'
+    | '/tu-noi-voi-minh'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MucTieuRoute: typeof MucTieuRoute
+  NhatKyRoute: typeof NhatKyRoute
+  ThietLapRoute: typeof ThietLapRoute
+  TienBoRoute: typeof TienBoRoute
+  TuNoiVoiMinhRoute: typeof TuNoiVoiMinhRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +117,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/muc-tieu': {
+      id: '/muc-tieu'
+      path: '/muc-tieu'
+      fullPath: '/muc-tieu'
+      preLoaderRoute: typeof MucTieuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nhat-ky': {
+      id: '/nhat-ky'
+      path: '/nhat-ky'
+      fullPath: '/nhat-ky'
+      preLoaderRoute: typeof NhatKyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/thiet-lap': {
+      id: '/thiet-lap'
+      path: '/thiet-lap'
+      fullPath: '/thiet-lap'
+      preLoaderRoute: typeof ThietLapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tien-bo': {
+      id: '/tien-bo'
+      path: '/tien-bo'
+      fullPath: '/tien-bo'
+      preLoaderRoute: typeof TienBoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tu-noi-voi-minh': {
+      id: '/tu-noi-voi-minh'
+      path: '/tu-noi-voi-minh'
+      fullPath: '/tu-noi-voi-minh'
+      preLoaderRoute: typeof TuNoiVoiMinhRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MucTieuRoute: MucTieuRoute,
+  NhatKyRoute: NhatKyRoute,
+  ThietLapRoute: ThietLapRoute,
+  TienBoRoute: TienBoRoute,
+  TuNoiVoiMinhRoute: TuNoiVoiMinhRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
