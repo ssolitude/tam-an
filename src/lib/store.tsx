@@ -162,12 +162,14 @@ const defaultPrefs: Prefs = {
 
 const SCHEMA_VERSION = 1;
 
+// Sample ids must be deterministic: seedState() runs during SSR and on the
+// client, and random ids would cause a React hydration mismatch.
 const seedState = (): State => ({
   version: SCHEMA_VERSION,
   prefs: defaultPrefs,
   checkIns: [
     {
-      id: uid(),
+      id: "seed-checkin-1",
       date: todayKey(),
       createdAt: new Date().toISOString(),
       mood: 3,
@@ -180,9 +182,9 @@ const seedState = (): State => ({
     },
   ],
   actions: [
-    { id: uid(), title: "Uống một ly nước", date: todayKey(), done: false, sample: true },
+    { id: "seed-action-1", title: "Uống một ly nước", date: todayKey(), done: false, sample: true },
     {
-      id: uid(),
+      id: "seed-action-2",
       title: "Học 10 phút tiếng Trung (chỉ nghe cũng được)",
       area: "tieng-trung",
       date: todayKey(),
@@ -190,7 +192,7 @@ const seedState = (): State => ({
       sample: true,
     },
     {
-      id: uid(),
+      id: "seed-action-3",
       title: "Rửa mặt nhẹ nhàng, không soi gương quá 1 phút",
       area: "lan-da",
       date: todayKey(),
@@ -200,7 +202,7 @@ const seedState = (): State => ({
   ],
   goals: [
     {
-      id: uid(),
+      id: "seed-goal-1",
       area: "cong-viec",
       direction90: "Có một công việc gần nhà mà mình thấy làm được.",
       monthFocus: "Chuẩn bị CV và nộp đều đặn, không cần hoàn hảo.",
@@ -209,7 +211,7 @@ const seedState = (): State => ({
       sample: true,
     },
     {
-      id: uid(),
+      id: "seed-goal-2",
       area: "lan-da",
       direction90: "Đối xử với da bằng sự kiên nhẫn thay vì sốt ruột.",
       monthFocus: "Giữ một routine đơn giản, làm được cả những ngày mệt.",
@@ -220,22 +222,22 @@ const seedState = (): State => ({
   ],
   reminders: [
     {
-      id: uid(),
+      id: "seed-reminder-1",
       text: "Mình đang ở một giai đoạn, không phải một kết luận về giá trị của mình.",
       sample: true,
     },
     {
-      id: uid(),
+      id: "seed-reminder-2",
       text: "Chưa có việc không có nghĩa là mình không có khả năng. Nó nghĩa là mình đang trong quá trình.",
       sample: true,
     },
     {
-      id: uid(),
+      id: "seed-reminder-3",
       text: "Hôm nay mình chỉ cần làm một việc nhỏ. Nghỉ cũng được tính.",
       sample: true,
     },
     {
-      id: uid(),
+      id: "seed-reminder-4",
       text: "Da mình đang được chăm, không phải đang bị chấm điểm.",
       sample: true,
     },
