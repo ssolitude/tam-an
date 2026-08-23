@@ -91,11 +91,13 @@ function Home() {
           {greeting}. Mình không cần khá lên mới được ở đây.
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          {latest
-            ? gentle
-              ? `Mình đã ghi nhận hôm nay: ${MOOD_LABELS[latest.mood - 1]?.toLowerCase()}, năng lượng ${ENERGY_LABELS[latest.energy - 1]?.toLowerCase()}. Cứ đi chậm thôi.`
-              : `Đã ghi nhận: mood ${latest.mood}/5, năng lượng ${latest.energy}/5. Giờ chọn một việc vừa sức.`
-            : "Bắt đầu bằng hai câu hỏi ngắn. Không có câu trả lời sai, và mình không bị chấm điểm."}
+          {!latest
+            ? "Bắt đầu bằng hai câu hỏi ngắn. Không có câu trả lời sai, và mình không bị chấm điểm."
+            : latest.mood != null && latest.energy != null
+              ? gentle
+                ? `Mình đã ghi nhận hôm nay: ${MOOD_LABELS[latest.mood - 1]?.toLowerCase()}, năng lượng ${ENERGY_LABELS[latest.energy - 1]?.toLowerCase()}. Cứ đi chậm thôi.`
+                : `Đã ghi nhận: mood ${latest.mood}/5, năng lượng ${latest.energy}/5. Giờ chọn một việc vừa sức.`
+              : "Mình đã ghi nhận hôm nay rồi. Cứ đi chậm thôi."}
         </p>
         <div className="mt-5 flex flex-wrap gap-2">
           <Button onClick={openRescue} className="rounded-full">
