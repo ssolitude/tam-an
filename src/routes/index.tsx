@@ -47,7 +47,7 @@ const GROUNDING = [
 ];
 
 function Home() {
-  const { state, addCheckIn, addAction, updateAction, removeAction, updateCheckIn } = useStore();
+  const { state, hydrated, addCheckIn, addAction, updateAction, removeAction, updateCheckIn } = useStore();
   const { latest, todayActions, lowEnergy } = useToday();
   const { openRescue } = useRescue();
   const { prefs } = state;
@@ -62,7 +62,8 @@ function Home() {
     setMood(latest?.mood);
     setEnergy(latest?.energy);
     setEvening(latest?.eveningNote ?? "");
-  }, [latest?.id]);
+  }, [latest?.id, latest?.mood, latest?.energy, latest?.eveningNote, hydrated]);
+
 
   const grounding = GROUNDING[new Date().getDate() % GROUNDING.length];
   const doneToday = todayActions.filter((a) => a.done).length;
