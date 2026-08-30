@@ -62,7 +62,8 @@ function Home() {
     setMood(latest?.mood);
     setEnergy(latest?.energy);
     setEvening(latest?.eveningNote ?? "");
-  }, [latest?.id]);
+  }, [latest?.id, latest?.mood, latest?.energy, latest?.eveningNote, state.hydrated]);
+
 
   const grounding = GROUNDING[new Date().getDate() % GROUNDING.length];
   const doneToday = todayActions.filter((a) => a.done).length;
