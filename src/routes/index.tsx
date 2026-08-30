@@ -47,7 +47,7 @@ const GROUNDING = [
 ];
 
 function Home() {
-  const { state, addCheckIn, addAction, updateAction, removeAction, updateCheckIn } = useStore();
+  const { state, hydrated, addCheckIn, addAction, updateAction, removeAction, updateCheckIn } = useStore();
   const { latest, todayActions, lowEnergy } = useToday();
   const { openRescue } = useRescue();
   const { prefs } = state;
