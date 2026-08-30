@@ -58,6 +58,12 @@ function Home() {
   const [newArea, setNewArea] = useState<AreaKey | undefined>(prefs.priorities[0]);
   const [evening, setEvening] = useState(latest?.eveningNote ?? "");
 
+  useEffect(() => {
+    setMood(latest?.mood);
+    setEnergy(latest?.energy);
+    setEvening(latest?.eveningNote ?? "");
+  }, [latest?.id]);
+
   const grounding = GROUNDING[new Date().getDate() % GROUNDING.length];
   const doneToday = todayActions.filter((a) => a.done).length;
   const undone = todayActions.filter((a) => !a.done);
